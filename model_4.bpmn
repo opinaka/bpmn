@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_RecommandationLivres" targetNamespace="http://www.example.org/recommandation-livres" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+  <collaboration id="Collaboration_RecommandationLivres">
+    <participant id="Participant_Internaute" name="Internaute" processRef="Process_Internaute" />
+    <participant id="Participant_Systeme" name="Solution basée sur un Système de recommandation IA" processRef="Process_Systeme" />
+    <messageFlow id="MessageFlow_1" sourceRef="Task_NavigueSite" targetRef="Task_CollecteDonnees" />
+    <messageFlow id="MessageFlow_2" sourceRef="Task_EnvoiRecommandations" targetRef="Task_RecoitRecommandations" />
+    <messageFlow id="MessageFlow_3" sourceRef="Task_SelectionneLivre" targetRef="Task_TraiteSelectionLivre" />
+    <messageFlow id="MessageFlow_4" sourceRef="Task_ConfirmeAchat" targetRef="Task_TraiteAchat" />
+    <messageFlow id="MessageFlow_5" sourceRef="Task_EnvoiConfirmation" targetRef="Task_RecoitConfirmation" />
+  </collaboration>
+  <process id="Process_Internaute" name="Parcours utilisateur" isExecutable="false">
+    <startEvent id="StartEvent_1" name="Visite le site web">
+      <outgoing>SequenceFlow_1</outgoing>
+    </startEvent>
+    <task id="Task_NavigueSite" name="Navigue sur le site">
+      <incoming>SequenceFlow_1</incoming>
+      <outgoing>SequenceFlow_2</outgoing>
+    </task>
+    <task id="Task_RecoitRecommandations" name="Reçoit des recommandations de livres de cuisine">
+      <incoming>SequenceFlow_2</incoming>
+      <outgoing>SequenceFlow_3</outgoing>
+    </task>
+    <exclusiveGateway id="Gateway_1" name="Intéressé?">
+      <incoming>SequenceFlow_3</incoming>
+      <outgoing>SequenceFlow_4</outgoing>
+      <outgoing>SequenceFlow_5</outgoing>
+    </exclusiveGateway>
+    <task id="Task_SelectionneLivre" name="Sélectionne un livre">
+      <incoming>SequenceFlow_4</incoming>
+      <outgoing>SequenceFlow_6</outgoing>
+    </task>
+    <exclusiveGateway id="Gateway_2" name="Décide d&#39;acheter?">
+      <incoming>SequenceFlow_6</incoming>
+      <outgoing>SequenceFlow_7</outgoing>
+      <outgoing>SequenceFlow_8</outgoing>
+    </exclusiveGateway>
+    <task id="Task_ConfirmeAchat" name="Confirme l&#39;achat">
+      <incoming>SequenceFlow_7</incoming>
+      <outgoing>SequenceFlow_9</outgoing>
+    </task>
+    <task id="Task_RecoitConfirmation" name="Reçoit confirmation d&#39;achat">
+      <incoming>SequenceFlow_9</incoming>
+      <outgoing>SequenceFlow_10</outgoing>
+    </task>
+    <endEvent id="EndEvent_1" name="Achat complété">
+      <incoming>SequenceFlow_10</incoming>
+    </endEvent>
+    <endEvent id="EndEvent_2" name="Quitte sans achat">
+      <incoming>SequenceFlow_5</incoming>
+      <incoming>SequenceFlow_8</incoming>
+    </endEvent>
+    <sequenceFlow id="SequenceFlow_1" sourceRef="StartEvent_1" targetRef="Task_NavigueSite" />
+    <sequenceFlow id="SequenceFlow_2" sourceRef="Task_NavigueSite" targetRef="Task_RecoitRecommandations" />
+    <sequenceFlow id="SequenceFlow_3" sourceRef="Task_RecoitRecommandations" targetRef="Gateway_1" />
+    <sequenceFlow id="SequenceFlow_4" name="Oui" sourceRef="Gateway_1" targetRef="Task_SelectionneLivre" />
+    <sequenceFlow id="SequenceFlow_5" name="Non" sourceRef="Gateway_1" targetRef="EndEvent_2" />
+    <sequenceFlow id="SequenceFlow_6" sourceRef="Task_SelectionneLivre" targetRef="Gateway_2" />
+    <sequenceFlow id="SequenceFlow_7" name="Oui" sourceRef="Gateway_2" targetRef="Task_ConfirmeAchat" />
+    <sequenceFlow id="SequenceFlow_8" name="Non" sourceRef="Gateway_2" targetRef="EndEvent_2" />
+    <sequenceFlow id="SequenceFlow_9" sourceRef="Task_ConfirmeAchat" targetRef="Task_RecoitConfirmation" />
+    <sequenceFlow id="SequenceFlow_10" sourceRef="Task_RecoitConfirmation" targetRef="EndEvent_1" />
+  </process>
+  <process id="Process_Systeme" name="Solution basée sur un Système de recommandation IA" isExecutable="false">
+    <startEvent id="StartEvent_2" name="Détecte nouvel utilisateur">
+      <outgoing>SequenceFlow_11</outgoing>
+    </startEvent>
+    <task id="Task_CollecteDonnees" name="Collecte données de navigation">
+      <incoming>SequenceFlow_11</incoming>
+      <outgoing>SequenceFlow_12</outgoing>
+    </task>
+    <task id="Task_AnalyseProfil" name="Analyse le profil utilisateur">
+      <incoming>SequenceFlow_12</incoming>
+      <outgoing>SequenceFlow_13</outgoing>
+    </task>
+    <task id="Task_ExtraitPreferences" name="Extrait préférences culinaires">
+      <incoming>SequenceFlow_13</incoming>
+      <outgoing>SequenceFlow_14</outgoing>
+    </task>
+    <task id="Task_GenereRecommandations" name="Génère recommandations via IA">
+      <incoming>SequenceFlow_14</incoming>
+      <outgoing>SequenceFlow_15</outgoing>
+    </task>
+    <eventBasedGateway id="Gateway_3" name="Attente action utilisateur">
+      <incoming>SequenceFlow_16</incoming>
+      <outgoing>SequenceFlow_17</outgoing>
+      <outgoing>SequenceFlow_18</outgoing>
+    </eventBasedGateway>
+    <intermediateCatchEvent id="Event_Selection" name="Livre sélectionné">
+      <incoming>SequenceFlow_17</incoming>
+      <outgoing>SequenceFlow_19</outgoing>
+      <messageEventDefinition id="MessageEventDefinition_1" />
+    </intermediateCatchEvent>
+    <intermediateCatchEvent id="Event_Timeout" name="Délai expiré">
+      <incoming>SequenceFlow_18</incoming>
+      <outgoing>SequenceFlow_20</outgoing>
+      <timerEventDefinition id="TimerEventDefinition_1" />
+    </intermediateCatchEvent>
+    <task id="Task_TraiteSelectionLivre" name="Traite sélection du livre">
+      <incoming>SequenceFlow_19</incoming>
+      <outgoing>SequenceFlow_21</outgoing>
+    </task>
+    <task id="Task_AffineModeleIA" name="Affine le modèle IA">
+      <incoming>SequenceFlow_20</incoming>
+      <outgoing>SequenceFlow_22</outgoing>
+    </task>
+    <task id="Task_TraiteAchat" name="Traite la commande">
+      <incoming>SequenceFlow_21</incoming>
+      <outgoing>SequenceFlow_23</outgoing>
+    </task>
+    <task id="Task_EnvoiConfirmation" name="Envoie confirmation">
+      <incoming>SequenceFlow_23</incoming>
+      <outgoing>SequenceFlow_24</outgoing>
+    </task>
+    <task id="Task_MiseAJourProfil" name="Mise à jour du profil utilisateur">
+      <incoming>SequenceFlow_24</incoming>
+      <incoming>SequenceFlow_22</incoming>
+      <outgoing>SequenceFlow_25</outgoing>
+    </task>
+    <endEvent id="EndEvent_3" name="Session terminée">
+      <incoming>SequenceFlow_25</incoming>
+    </endEvent>
+    <sequenceFlow id="SequenceFlow_11" sourceRef="StartEvent_2" targetRef="Task_CollecteDonnees" />
+    <sequenceFlow id="SequenceFlow_12" sourceRef="Task_CollecteDonnees" targetRef="Task_AnalyseProfil" />
+    <sequenceFlow id="SequenceFlow_13" sourceRef="Task_AnalyseProfil" targetRef="Task_ExtraitPreferences" />
+    <sequenceFlow id="SequenceFlow_14" sourceRef="Task_ExtraitPreferences" targetRef="Task_GenereRecommandations" />
+    <sequenceFlow id="SequenceFlow_15" sourceRef="Task_GenereRecommandations" targetRef="Task_EnvoiRecommandations" />
+    <sequenceFlow id="SequenceFlow_16" sourceRef="Task_EnvoiRecommandations" targetRef="Gateway_3" />
+    <sequenceFlow id="SequenceFlow_17" sourceRef="Gateway_3" targetRef="Event_Selection" />
+    <sequenceFlow id="SequenceFlow_18" sourceRef="Gateway_3" targetRef="Event_Timeout" />
+    <sequenceFlow id="SequenceFlow_19" sourceRef="Event_Selection" targetRef="Task_TraiteSelectionLivre" />
+    <sequenceFlow id="SequenceFlow_20" sourceRef="Event_Timeout" targetRef="Task_AffineModeleIA" />
+    <sequenceFlow id="SequenceFlow_21" sourceRef="Task_TraiteSelectionLivre" targetRef="Task_TraiteAchat" />
+    <sequenceFlow id="SequenceFlow_22" sourceRef="Task_AffineModeleIA" targetRef="Task_MiseAJourProfil" />
+    <sequenceFlow id="SequenceFlow_23" sourceRef="Task_TraiteAchat" targetRef="Task_EnvoiConfirmation" />
+    <sequenceFlow id="SequenceFlow_24" sourceRef="Task_EnvoiConfirmation" targetRef="Task_MiseAJourProfil" />
+    <sequenceFlow id="SequenceFlow_25" sourceRef="Task_MiseAJourProfil" targetRef="EndEvent_3" />
+    <task id="Task_EnvoiRecommandations" name="Envoie recommandations personnalisées">
+      <incoming>SequenceFlow_15</incoming>
+      <outgoing>SequenceFlow_16</outgoing>
+    </task>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_RecommandationLivres">
+      <bpmndi:BPMNShape id="Participant_Internaute_di" bpmnElement="Participant_Internaute" isHorizontal="true">
+        <omgdc:Bounds x="160" y="80" width="1100" height="250" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <omgdc:Bounds x="212" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="197" y="225" width="67" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_NavigueSite_di" bpmnElement="Task_NavigueSite">
+        <omgdc:Bounds x="300" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_RecoitRecommandations_di" bpmnElement="Task_RecoitRecommandations">
+        <omgdc:Bounds x="450" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1_di" bpmnElement="Gateway_1" isMarkerVisible="true">
+        <omgdc:Bounds x="605" y="175" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="606" y="145" width="48" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SelectionneLivre_di" bpmnElement="Task_SelectionneLivre">
+        <omgdc:Bounds x="710" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_2_di" bpmnElement="Gateway_2" isMarkerVisible="true">
+        <omgdc:Bounds x="865" y="175" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="855" y="145" width="70" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ConfirmeAchat_di" bpmnElement="Task_ConfirmeAchat">
+        <omgdc:Bounds x="960" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_RecoitConfirmation_di" bpmnElement="Task_RecoitConfirmation">
+        <omgdc:Bounds x="1110" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1_di" bpmnElement="EndEvent_1">
+        <omgdc:Bounds x="1212" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1195" y="225" width="70" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_2_di" bpmnElement="EndEvent_2">
+        <omgdc:Bounds x="712" y="272" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="692" y="315" width="77" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1_di" bpmnElement="SequenceFlow_1">
+        <omgdi:waypoint x="248" y="200" />
+        <omgdi:waypoint x="300" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_2_di" bpmnElement="SequenceFlow_2">
+        <omgdi:waypoint x="400" y="200" />
+        <omgdi:waypoint x="450" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_3_di" bpmnElement="SequenceFlow_3">
+        <omgdi:waypoint x="550" y="200" />
+        <omgdi:waypoint x="605" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_4_di" bpmnElement="SequenceFlow_4">
+        <omgdi:waypoint x="655" y="200" />
+        <omgdi:waypoint x="710" y="200" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="673" y="182" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_5_di" bpmnElement="SequenceFlow_5">
+        <omgdi:waypoint x="630" y="225" />
+        <omgdi:waypoint x="630" y="290" />
+        <omgdi:waypoint x="712" y="290" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="635" y="253" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_6_di" bpmnElement="SequenceFlow_6">
+        <omgdi:waypoint x="810" y="200" />
+        <omgdi:waypoint x="865" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_7_di" bpmnElement="SequenceFlow_7">
+        <omgdi:waypoint x="915" y="200" />
+        <omgdi:waypoint x="960" y="200" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="928" y="182" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_8_di" bpmnElement="SequenceFlow_8">
+        <omgdi:waypoint x="890" y="225" />
+        <omgdi:waypoint x="890" y="290" />
+        <omgdi:waypoint x="748" y="290" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="895" y="253" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_9_di" bpmnElement="SequenceFlow_9">
+        <omgdi:waypoint x="1060" y="200" />
+        <omgdi:waypoint x="1110" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_10_di" bpmnElement="SequenceFlow_10">
+        <omgdi:waypoint x="1210" y="200" />
+        <omgdi:waypoint x="1212" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Participant_Systeme_di" bpmnElement="Participant_Systeme" isHorizontal="true">
+        <omgdc:Bounds x="160" y="400" width="1100" height="300" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_2_di" bpmnElement="StartEvent_2">
+        <omgdc:Bounds x="212" y="482" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="195" y="525" width="70" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_CollecteDonnees_di" bpmnElement="Task_CollecteDonnees">
+        <omgdc:Bounds x="300" y="460" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_AnalyseProfil_di" bpmnElement="Task_AnalyseProfil">
+        <omgdc:Bounds x="450" y="460" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ExtraitPreferences_di" bpmnElement="Task_ExtraitPreferences">
+        <omgdc:Bounds x="450" y="560" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_GenereRecommandations_di" bpmnElement="Task_GenereRecommandations">
+        <omgdc:Bounds x="580" y="560" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_3_di" bpmnElement="Gateway_3">
+        <omgdc:Bounds x="715" y="475" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="774.5" y="486" width="67" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_Selection_di" bpmnElement="Event_Selection">
+        <omgdc:Bounds x="782" y="442" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="763" y="412" width="74" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_Timeout_di" bpmnElement="Event_Timeout">
+        <omgdc:Bounds x="782" y="522" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="770" y="565" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_TraiteSelectionLivre_di" bpmnElement="Task_TraiteSelectionLivre">
+        <omgdc:Bounds x="840" y="420" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_AffineModeleIA_di" bpmnElement="Task_AffineModeleIA">
+        <omgdc:Bounds x="840" y="500" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_TraiteAchat_di" bpmnElement="Task_TraiteAchat">
+        <omgdc:Bounds x="960" y="420" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_EnvoiConfirmation_di" bpmnElement="Task_EnvoiConfirmation">
+        <omgdc:Bounds x="1080" y="420" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_MiseAJourProfil_di" bpmnElement="Task_MiseAJourProfil">
+        <omgdc:Bounds x="960" y="580" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_3_di" bpmnElement="EndEvent_3">
+        <omgdc:Bounds x="1112" y="602" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1093" y="645" width="75" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_EnvoiRecommandations_di" bpmnElement="Task_EnvoiRecommandations">
+        <omgdc:Bounds x="500" y="430" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_11_di" bpmnElement="SequenceFlow_11">
+        <omgdi:waypoint x="248" y="500" />
+        <omgdi:waypoint x="300" y="500" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_12_di" bpmnElement="SequenceFlow_12">
+        <omgdi:waypoint x="400" y="500" />
+        <omgdi:waypoint x="450" y="500" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_13_di" bpmnElement="SequenceFlow_13">
+        <omgdi:waypoint x="500" y="540" />
+        <omgdi:waypoint x="500" y="560" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_14_di" bpmnElement="SequenceFlow_14">
+        <omgdi:waypoint x="550" y="600" />
+        <omgdi:waypoint x="580" y="600" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_15_di" bpmnElement="SequenceFlow_15">
+        <omgdi:waypoint x="630" y="560" />
+        <omgdi:waypoint x="630" y="535" />
+        <omgdi:waypoint x="550" y="535" />
+        <omgdi:waypoint x="550" y="510" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_16_di" bpmnElement="SequenceFlow_16">
+        <omgdi:waypoint x="600" y="470" />
+        <omgdi:waypoint x="658" y="470" />
+        <omgdi:waypoint x="658" y="500" />
+        <omgdi:waypoint x="715" y="500" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_17_di" bpmnElement="SequenceFlow_17">
+        <omgdi:waypoint x="740" y="475" />
+        <omgdi:waypoint x="740" y="460" />
+        <omgdi:waypoint x="782" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_18_di" bpmnElement="SequenceFlow_18">
+        <omgdi:waypoint x="740" y="525" />
+        <omgdi:waypoint x="740" y="540" />
+        <omgdi:waypoint x="782" y="540" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_19_di" bpmnElement="SequenceFlow_19">
+        <omgdi:waypoint x="818" y="460" />
+        <omgdi:waypoint x="840" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_20_di" bpmnElement="SequenceFlow_20">
+        <omgdi:waypoint x="818" y="540" />
+        <omgdi:waypoint x="840" y="540" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_21_di" bpmnElement="SequenceFlow_21">
+        <omgdi:waypoint x="940" y="460" />
+        <omgdi:waypoint x="960" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_22_di" bpmnElement="SequenceFlow_22">
+        <omgdi:waypoint x="890" y="580" />
+        <omgdi:waypoint x="890" y="620" />
+        <omgdi:waypoint x="960" y="620" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_23_di" bpmnElement="SequenceFlow_23">
+        <omgdi:waypoint x="1060" y="460" />
+        <omgdi:waypoint x="1080" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_24_di" bpmnElement="SequenceFlow_24">
+        <omgdi:waypoint x="1130" y="500" />
+        <omgdi:waypoint x="1130" y="620" />
+        <omgdi:waypoint x="1060" y="620" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_25_di" bpmnElement="SequenceFlow_25">
+        <omgdi:waypoint x="1060" y="620" />
+        <omgdi:waypoint x="1112" y="620" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MessageFlow_1_di" bpmnElement="MessageFlow_1">
+        <omgdi:waypoint x="350" y="240" />
+        <omgdi:waypoint x="350" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MessageFlow_2_di" bpmnElement="MessageFlow_2">
+        <omgdi:waypoint x="550" y="430" />
+        <omgdi:waypoint x="550" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MessageFlow_3_di" bpmnElement="MessageFlow_3">
+        <omgdi:waypoint x="760" y="240" />
+        <omgdi:waypoint x="760" y="330" />
+        <omgdi:waypoint x="800" y="330" />
+        <omgdi:waypoint x="800" y="442" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MessageFlow_4_di" bpmnElement="MessageFlow_4">
+        <omgdi:waypoint x="1010" y="240" />
+        <omgdi:waypoint x="1010" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MessageFlow_5_di" bpmnElement="MessageFlow_5">
+        <omgdi:waypoint x="1130" y="420" />
+        <omgdi:waypoint x="1130" y="300" />
+        <omgdi:waypoint x="1160" y="300" />
+        <omgdi:waypoint x="1160" y="240" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

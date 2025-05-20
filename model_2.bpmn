@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             expressionLanguage="http://www.w3.org/1999/XPath"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             targetNamespace=""
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+  
+  <process id="Process_Simple" isExecutable="false" name="Processus Simple">
+    <!-- Événement de départ -->
+    <startEvent id="StartEvent_1" name="Début">
+      <outgoing>SequenceFlow_1</outgoing>
+    </startEvent>
+    
+    <!-- Une seule tâche -->
+    <task id="Task_1" name="Traiter la demande">
+      <incoming>SequenceFlow_1</incoming>
+      <outgoing>SequenceFlow_2</outgoing>
+    </task>
+    
+    <!-- Événement de fin -->
+    <endEvent id="EndEvent_1" name="Fin">
+      <incoming>SequenceFlow_2</incoming>
+    </endEvent>
+    
+    <!-- Flux de séquence -->
+    <sequenceFlow id="SequenceFlow_1" sourceRef="StartEvent_1" targetRef="Task_1" />
+    <sequenceFlow id="SequenceFlow_2" sourceRef="Task_1" targetRef="EndEvent_1" />
+  </process>
+  
+  <!-- Informations de diagramme (simplifiées) -->
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_Simple">
+      <!-- Position du StartEvent -->
+      <bpmndi:BPMNShape bpmnElement="StartEvent_1" id="StartEvent_1_di">
+        <omgdc:Bounds height="36.0" width="36.0" x="150.0" y="100.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="26.0" x="155.0" y="143.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Position du Task -->
+      <bpmndi:BPMNShape bpmnElement="Task_1" id="Task_1_di">
+        <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="78.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="250.0" y="111.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Position du EndEvent -->
+      <bpmndi:BPMNShape bpmnElement="EndEvent_1" id="EndEvent_1_di">
+        <omgdc:Bounds height="36.0" width="36.0" x="400.0" y="100.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="16.0" x="410.0" y="143.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Position des flux de séquence -->
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_1" id="SequenceFlow_1_di">
+        <omgdi:waypoint x="186.0" y="118.0"/>
+        <omgdi:waypoint x="250.0" y="118.0"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_2" id="SequenceFlow_2_di">
+        <omgdi:waypoint x="350.0" y="118.0"/>
+        <omgdi:waypoint x="400.0" y="118.0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

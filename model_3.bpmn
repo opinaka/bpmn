@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             expressionLanguage="http://www.w3.org/1999/XPath"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             targetNamespace=""
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+  
+  <collaboration id="Collaboration_ProcessusRepas">
+    <participant id="Participant_Personne" name="Personne affamée" processRef="Process_Repas">
+    </participant>
+  </collaboration>
+  
+  <process id="Process_Repas" isExecutable="false" name="Processus de préparation et consommation d'un repas">
+    <!-- Événement de départ : avoir faim -->
+    <startEvent id="StartEvent_Faim" name="Avoir faim">
+      <outgoing>SequenceFlow_1</outgoing>
+    </startEvent>
+    
+    <!-- Tâche 1 : Faire les courses -->
+    <task id="Task_FaireCourses" name="Faire les courses">
+      <incoming>SequenceFlow_1</incoming>
+      <outgoing>SequenceFlow_2</outgoing>
+    </task>
+    
+    <!-- Tâche 2 : Préparer le repas -->
+    <task id="Task_PreparerRepas" name="Préparer un repas">
+      <incoming>SequenceFlow_2</incoming>
+      <outgoing>SequenceFlow_3</outgoing>
+    </task>
+    
+    <!-- Tâche 3 : Manger le repas -->
+    <task id="Task_MangerRepas" name="Manger le repas">
+      <incoming>SequenceFlow_3</incoming>
+      <outgoing>SequenceFlow_4</outgoing>
+    </task>
+    
+    <!-- Événement de fin : être rassasié -->
+    <endEvent id="EndEvent_Rassasie" name="Avoir sa faim satisfaite">
+      <incoming>SequenceFlow_4</incoming>
+    </endEvent>
+    
+    <!-- Flux de séquence -->
+    <sequenceFlow id="SequenceFlow_1" sourceRef="StartEvent_Faim" targetRef="Task_FaireCourses" />
+    <sequenceFlow id="SequenceFlow_2" sourceRef="Task_FaireCourses" targetRef="Task_PreparerRepas" />
+    <sequenceFlow id="SequenceFlow_3" sourceRef="Task_PreparerRepas" targetRef="Task_MangerRepas" />
+    <sequenceFlow id="SequenceFlow_4" sourceRef="Task_MangerRepas" targetRef="EndEvent_Rassasie" />
+  </process>
+  
+  <!-- Informations de diagramme -->
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_ProcessusRepas">
+      <!-- Participant -->
+      <bpmndi:BPMNShape bpmnElement="Participant_Personne" id="Participant_Personne_di" isHorizontal="true">
+        <omgdc:Bounds height="200.0" width="800.0" x="100.0" y="100.0"/>
+      </bpmndi:BPMNShape>
+      
+      <!-- Événement de départ -->
+      <bpmndi:BPMNShape bpmnElement="StartEvent_Faim" id="StartEvent_Faim_di">
+        <omgdc:Bounds height="36.0" width="36.0" x="150.0" y="182.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="60.0" x="138.0" y="225.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Tâche Faire les courses -->
+      <bpmndi:BPMNShape bpmnElement="Task_FaireCourses" id="Task_FaireCourses_di">
+        <omgdc:Bounds height="80.0" width="100.0" x="250.0" y="160.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="250.0" y="193.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Tâche Préparer le repas -->
+      <bpmndi:BPMNShape bpmnElement="Task_PreparerRepas" id="Task_PreparerRepas_di">
+        <omgdc:Bounds height="80.0" width="100.0" x="420.0" y="160.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="420.0" y="193.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Tâche Manger le repas -->
+      <bpmndi:BPMNShape bpmnElement="Task_MangerRepas" id="Task_MangerRepas_di">
+        <omgdc:Bounds height="80.0" width="100.0" x="590.0" y="160.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="590.0" y="193.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Événement de fin -->
+      <bpmndi:BPMNShape bpmnElement="EndEvent_Rassasie" id="EndEvent_Rassasie_di">
+        <omgdc:Bounds height="36.0" width="36.0" x="750.0" y="182.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="28.0" width="80.0" x="728.0" y="225.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Flux de séquence -->
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_1" id="SequenceFlow_1_di">
+        <omgdi:waypoint x="186.0" y="200.0"/>
+        <omgdi:waypoint x="250.0" y="200.0"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_2" id="SequenceFlow_2_di">
+        <omgdi:waypoint x="350.0" y="200.0"/>
+        <omgdi:waypoint x="420.0" y="200.0"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_3" id="SequenceFlow_3_di">
+        <omgdi:waypoint x="520.0" y="200.0"/>
+        <omgdi:waypoint x="590.0" y="200.0"/>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_4" id="SequenceFlow_4_di">
+        <omgdi:waypoint x="690.0" y="200.0"/>
+        <omgdi:waypoint x="750.0" y="200.0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
